@@ -138,12 +138,8 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
 <!--cover-->
 <div id="cover-photo" >
     <div style="width: 800px; margin: auto; min-height: 400px;">
-
-
-    <div style="display: flex;">
-
         <!--Delete-timeline-->
-        <div style=" min-height: 400px; flex: 2.5; padding: 20px 0 20px 20px;">
+        <div style=" min-height: 400px; padding: 20px 0 20px 20px;">
 
             <div style="border: solid thin #aaa; padding: 10px; background-color:white; ">
                 <h2>Single Post</h2>
@@ -155,45 +151,29 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
                 if(is_array($row)){
 
 
-                    $row_user = $user->get_user($row['userid']);
-                   include("post.php");
+                    $row_user = $user->get_user($row[0]['userid']);
+                include("post.php");
                 }
             ?>
-            <br style="clear: both;">
-
             <div style="border: solid thin #aaa; padding: 10px; background-color:white; ">
 
                 <form method="post" enctype="multipart/form-data">
-
-                    <label for="post-box"></label><input name="post" id="post-box" placeholder="Post  a comment">
-                    <input type="file" name="parent" value="<?php echo $row['postid'] ?>">
+                    <label for="post-box"></label><input name="post" id="post-box" placeholder="Post a comment">
+                    <input type="file" name="parent" value="<?php echo $row[0]['postid'] ?>">
                     <input id="button-post" type="submit" value="Post">
-                    <br>
                 </form>
             </div>
             <?php
-            $comments = $post->get_comments($row['postid']);
+            $comments = $post->get_comments($row[0]['postid']);
             if(is_array($comments)){
                 foreach ($comments as $comment){
                     include ("comment.php");
                 }
             }
-
-
             ?>
-            ?>
-                </div>
-
-
-                </div>
-
-
-
-
-            </div>
-
-
         </div>
+    </div>
+</div>
 
 
 </body>

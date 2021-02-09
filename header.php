@@ -19,7 +19,7 @@ if(file_exists($USER['profile_pic']))
         <a href="Timeline.php" style="color: white; text-decoration: none; ">Facebook</a>
 
         &nbsp &nbsp &nbsp <label for="search-box"></label>
-        <input type="text" id="search-box name='find'" placeholder="Search in Evabook">
+        <input type="text" id="search-box" name='find' placeholder="Search in Evabook">
 
            <a href="profile.php">
         <img src="<?php echo $top_image ?>" style="width: 50px; float: right; border-radius: 50%;"></a>

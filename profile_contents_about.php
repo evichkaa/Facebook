@@ -5,7 +5,6 @@
 
 
 <?php
-include ("classes/auto.php");
 
 $settings_class = new Settings();
 

@@ -1,19 +1,17 @@
 <?php
 
 
-include ("classes/Login.php");
-include ("classes/user.php");
-include ("classes/post.php");
-include ("classes/image.php");
-include ("classes/profile.php");
+include ("classes/auto.php");
 
 
 
 //        $login = new Login();
 //        $user_data=$login->check_login($_SESSION['facebook_userid']);
 
+
+
         if(isset($_GET['find'])){
-            $find = addslashes($_GET['search-box']);
+            $find = addslashes($_GET['find']);
             $sql = "select * from users where first_name like '%$find%' || last_name like '%$find%' limit 30 ";
             $DB = new Database();
             $result = $DB->read($sql);

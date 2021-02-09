@@ -1,14 +1,5 @@
 <?php
 
-
-//include ("classes/Login.php");
-//include ("classes/user.php");
-//include ("classes/post.php");
-//include ("classes/image.php");
-//include ("classes/profile.php");
-
-
-
 include ("classes/auto.php");
 
 
@@ -18,7 +9,7 @@ $USER= $user_data;
 
 if(isset($_GET['id']) && is_numeric($_GET['id'])) {
     $profile = new Profile();
-    $profile_data = $profile->get_profile($_GET['id ']);
+    $profile_data = $profile->get_profile($_GET['id']);
 
     if (is_array($profile_data)) {
         $user_data = $profile_data[0];
@@ -27,7 +18,6 @@ if(isset($_GET['id']) && is_numeric($_GET['id'])) {
 
         $post= new Post();
         $likes=false;
-
         $error="";
 
 

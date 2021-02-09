@@ -26,7 +26,7 @@
         <div style="border: solid thin #aaa; padding: 10px; background-color:white; ">
             <form method="post" enctype="multipart/form-data">
                 <label for="post-box"></label><input name="post" id="post-box" placeholder="Whats on your mind?">
-                <input type="file" name="file">
+                <input type="file" name="file" accept="image/jpeg">
                 <input id="button-post" type="submit" value="Post">
                 <br>
             </form>

@@ -24,18 +24,14 @@ if(isset($_GET['type']) && isset($_GET['id'])){
         $allowed[]='comment';
 
         if(in_array($_GET['type'], $allowed)){
-
             $post= new Post();
             $user_class= new User();
             $post->like_post($_GET['id'],$_GET['type'],$_SESSION['facebook_userid']);
 
-            if($_GET['type'] == "user"){
-            $post->follow_user($_GET['id'],$_GET['type'],$_SESSION['facebook_userid']);
-            }
+            // if($_GET['type'] == "user"){
+            // $post->follow_user($_GET['id'],$_GET['type'],$_SESSION['facebook_userid']);
+            // }
         }
     }
-
 }
-
-header("Location: profile.php" );
-die;
+header("Location: $return_to");

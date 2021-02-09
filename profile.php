@@ -22,17 +22,14 @@ if(isset($_GET['id']) && is_numeric($_GET['id'])) {
 
 if($_SERVER['REQUEST_METHOD'] == "POST"){
 
-if(isset($_POST['firstname'])){
-$settings_class = new Settings();
-$settings_class->save_settings($_POST,$_SESSION['facebook_userid']);
+if(isset($_POST['first_name'])){
+    $settings_class = new Settings();
+    $settings_class->save_settings($_POST,$_SESSION['facebook_userid']);
 
-}else {
+} else {
     $post=new Post();
     $id=$_SESSION['facebook_userid'];
     $result=$post->create_post($id, $_POST,$_FILES);
-
-
-
 
 //    print_r($_POST);
     if($result == ""){
@@ -59,7 +56,7 @@ $posts=$post->get_posts($id);
 $user=new User();
 $id=$user_data['userid'];
 
-$friends=$user->get_following($user_data['userid'], $user);
+$friends=$user->get_following($user_data['userid'], "user");
 $image_class = new Image();
 
 ?>
@@ -182,8 +179,8 @@ $image_class = new Image();
             }
             ?>
 
-        <a href="profile.php?type=user&id= <?php echo $user_data['userid']?> " >
-        <input id="button-post" type="button" value="Follow (<?php echo $mylikes ?> " style="margin-right: 10px; background-color: lightblue; width: "  >
+        <a href="profile.php?type=user&id=<?php echo $user_data['userid']?> " >
+        <input id="button-post" type="button" value="Follow (<?php echo $mylikes ?>" style="margin-right: 10px; background-color: lightblue; width: "  >
         </a>
 
         <span style="font-size: 12px;">
@@ -209,7 +206,7 @@ $image_class = new Image();
         <br> <br>
         <a href="Timeline.php?section=timeline"><div id="menu-button">Timeline</div></a>
         <a href="profile.php?section=about&id=<?php echo $user_data['userid']?>"><div id="menu-button">About</div></a>
-        <a href="profile.php?section=about&followers<?php echo $user_data['userid']?>"><div id="menu-button">Followers</div></a>
+        <a href="profile.php?section=followers&id=<?php echo $user_data['userid']?>"><div id="menu-button">Followers</div></a>
         <a href="profile.php?section=following&id=<?php echo $user_data['userid']?>"><div id="menu-button">Following</div></a>
         <a href="profile.php?section=friends&id=<?php echo $user_data['userid']?>"><div id="menu-button">Friends</div></a>
         <a href="profile.php?section=photos&id=<?php echo $user_data['userid']?>"><div id="menu-button">Photos</div></a>

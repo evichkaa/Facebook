@@ -1,22 +1,16 @@
 <?php
 
-
-include ("classes/Login.php");
-include ("classes/user.php");
-include ("classes/post.php");
-include ("classes/image.php");
-include ("classes/profile.php");
-
-
+include ("classes/auto.php");
 
 
 $login = new Login();
+
 $user_data=$login->check_login($_SESSION['facebook_userid']);
 $USER= $user_data;
 
 if(isset($_GET['id']) && is_numeric($_GET['id'])) {
     $profile = new Profile();
-    $profile_data = $profile->get_profile($_GET['id ']);
+    $profile_data = $profile->get_profile($_GET['id']);
 
     if (is_array($profile_data)) {
         $user_data = $profile_data[0];
@@ -30,39 +24,37 @@ if (isset($_SERVER['HTTP_REFERER']) && !strstr($_SERVER['HTTP_REFERER'], "delete
 
 //if something was posted
 if($_SERVER['REQUEST_METHOD'] == "POST") {
-
+    $Post = new Post();
     $Post->delete_post($_POST['postid']);
     header("Location:" . $_SESSION['return_to']);
     die;
 }
 
-        $post = new Post();
-        $error="";
+$post = new Post();
+$error="";
 
-        if(isset($_GET['id'])) {
+if(isset($_GET['id'])) {
 
-            $row = $post->get_one_post($_GET['$id']);
+    $row = $post->get_one_post($_GET['id']);
 
-            if(!$row){
-                $error = "No such post found!";
-            }else {
-                if($row['userid'] != $_SESSION['facebook_userid']){
-                    $error = "Access denied - you can`t delete this post!";
-                }
-            }
-            } else {
-                    $error = "No such post found!";
-
+    if(!$row){
+        $error = "No such post found!";
+    }else {
+        if($row[0]['userid'] != $_SESSION['facebook_userid']){
+            $error = "Access denied - you can`t delete this post!";
         }
+    }
+}else {
+    $error = "No such post found!";
+}
 
-        //if something was posted
-        if($_SERVER['REQUEST_METHOD'] == "POST"){
-            $Post->delete_post($_POST['postid']);
-            header("Location: " . $_SESSION['return_to']);
-            die;
+//if something was posted
+if($_SERVER['REQUEST_METHOD'] == "POST"){
 
-
-        }
+    $Post->delete_post($_POST['postid']);
+    header("Location: " . $_SESSION['return_to']);
+    die;
+}
 ?>
 
 <!DOCTYPE html>
@@ -158,9 +150,7 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
             <div style="border: solid thin #aaa; padding: 10px; background-color:white; ">
                 <h2>Delete Post</h2>
                 <form method="post">
-
-<!--                    <hr>-->
-<!--                    --><?php
+                <?php
 
                     if($error!= ""){
                         echo $error;
@@ -169,11 +159,10 @@ if($_SERVER['REQUEST_METHOD'] == "POST") {
                         echo"Are you sure you want to delete this post?";
 
                         $user = new User();
-                        $row_user=$user->get_user($row['userid']);
-
-                        include ("post_delete.php");
-                      echo "  <input type='hidden' name='postid' value='$row[postid] '>";
-                      echo "<input id='button-post' type='submit' value='Delete'>";
+                        $row_user=$user->get_user($row[0]['userid']);
+                        $row_post=$row[0]['postid'];
+                        echo "<input type='hidden' name='postid' value='$row_post'>";
+                        echo "<input id='button-post' type='submit' value='Delete'>";
                     }
 
 

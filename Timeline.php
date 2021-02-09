@@ -165,21 +165,19 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
 
                 $followers = $user_class->get_following($_SESSION['facebook_userid'], "user");
                 $follower_id=false;
+                
                 if(is_array($followers)){
-
                     $follower_ids=array_column($followers, "userid");
                     $follower_ids=implode("',", $follower_ids);
 
                 }
-
-                if(isset($follower_ids)&& $follower_ids){
+                
+                if(isset($follower_ids) && $follower_ids){
                     $myuserid=$_SESSION['facebook_userid'];
-                $sql="select * from posts where parent=0 userid = '$myuserid' || userid in('".$follower_ids."') order by id desc limit 30";
-                $posts=$DB->read($sql);
+                    $sql="select * from posts where parent=0 userid = '$myuserid' || userid in('".$follower_ids."') order by id desc limit 30";
+                    $posts=$DB->read($sql);
                 }
-
-
-                if(isset($posts)&& $posts){
+                if(isset($posts) && $posts){
                     foreach ($posts as $row){
                         $user = new User();
                         $row_user = $user->get_user($row['userid']);

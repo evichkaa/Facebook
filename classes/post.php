@@ -56,7 +56,7 @@ class Post{
             if(isset($parent) && is_numeric($data['parent'])){
                 $parent=$data['parent'];
                 $sql ="update posts set comments = comments +1 where postid='$parent' limit 1";
-                $DB->save($query);
+                $DB->save($sql);
             }
 
             $query = "insert into posts (userid,postid,post,image,is_image,is_profile_image,is_cover_image,parent) values ('$userid','$postid','$post', '$myimage', '$is_image','$is_profile_image','$is_cover_image','$parent')";
@@ -70,15 +70,12 @@ class Post{
         return$this->error;
     }
 
-    public function edit_post($userid,$files){
-        if(!empty($data['post']) || !empty($files['file']['name']) ){
-
+    public function edit_post($userid,$data,$files = null){
+        if(!empty($post) || !empty($files['file']['name']) ){
             $myimage = "";
             $is_image = 0 ;
 
                 if (!empty($files['file']['name'])) {
-
-
                     $folder = "Uploads/" . $userid . "/";
                     // create folder
                     if (!file_exists($folder)) {
@@ -97,6 +94,7 @@ class Post{
             $post="";
             if(isset($data['post'])){
                 $post = addslashes($data['post']);
+                
             }
 
             $postid = addslashes($data['postid']);
@@ -106,10 +104,7 @@ class Post{
                 $query = "update posts set post = '$post'  where postid = '$postid' limit 1";
                 $DB = new Database();
                 $DB->save($query);
-
-//            }else {
-//            $this->error.="Please type something to post<br>";
-        }
+            }
         return$this->error;
     }
 
@@ -158,7 +153,6 @@ class Post{
 
     }
     public function delete_post($postid){
-
         if(!is_numeric($postid)){
             return false;
         }
@@ -167,20 +161,14 @@ class Post{
         $result=$DB->read($sql);
 
         if(is_array($result)){
-        if($result[0]['parent']>0){
-
-            $parent=$result[0]['parent'];
-
-            $sql ="update posts set comments = comments +1 where postid='$parent' limit 1";
-            $DB->save($query);
-        }
+            if($result[0]['parent']>0){
+                $parent=$result[0]['parent'];
+                $sql ="update posts set comments = comments +1 where postid='$parent' limit 1";
+                $DB->save($sql);
+            }
         }
         $query = "delete from posts where postid = '$postid'  limit 1";
-
         $result=$DB->read($query);
-
-
-
     }
 
 
@@ -209,12 +197,9 @@ class Post{
     public function get_likes($id,$type){
         if( is_numeric($id)){
             $DB= new Database();
-        //save
-            //  - details
-            $sql = "select likes from likes where type = 'type ' && id= '$id' limit 1 ";
+            $sql = "select likes from likes where type = '$type' && id= '$id' limit 1 ";
             $result = $DB->read($sql);
             if(is_array($result)) {
-
                 $likes = json_decode($result[0]['likes'], true);
                 return $likes;
             }
@@ -223,16 +208,10 @@ class Post{
     }
 
 
-
-
         public function like_post($id,$type,$facebook_userid){
 
         $DB= new Database();
-//        if($type == "post"){
 
-            $DB= new Database();
-
-        //save likes - details
             $sql = "select likes from likes where type = 'post ' && id= '$id' limit 1 ";
             $result = $DB->read($sql);
             if(is_array($result)){
@@ -250,11 +229,11 @@ class Post{
 
                     $likes_string = json_encode($likes);
 
-                    $sql = "update likes set likes = 'likes_sting ' where type = 'post ' && id= '$id' limit 1  ";
+                    $sql = "update likes set likes = '$likes_string' where type = 'post' && id = '$id' limit 1";
                     $DB->save($sql);
 
                     //increments the post table
-                    $sql = "update {$type} set likes = likes + 1 where {$type}id = '$id ' limit 1 ";
+                    $sql = "update {$type}s set likes = likes + 1 where {$type}id = '$id' limit 1 ";
                     $DB->save($sql);
 
 
@@ -263,17 +242,14 @@ class Post{
                 unset ($likes [$key]);
 
                     $likes_string = json_encode($likes);
-                    $sql = "update likes set likes = 'likes_sting ' where type = 'post ' && id = '$id' limit 1  ";
+                    $sql = "update likes set likes = '$likes_string' where type = 'post' && id = '$id' limit 1 ";
                     $DB->save($sql);
 
                     //increments the post table
-                    $sql = "update {$type} set likes = likes - 1 where {$type}id = '$id ' limit 1 ";
+                    $sql = "update {$type}s set likes = likes - 1 where {$type}id = '$id' limit 1 ";
                     $DB->save($sql);
 
                 }
-
-
-
             }else {
                 $arr["userid"] = $facebook_userid;
                 $arr["date"] = date("Y-m-d H:i:s");
@@ -281,15 +257,13 @@ class Post{
                 $arr2[] = $arr;
 
                 $likes= json_encode($arr2);
-                $sql = "insert into likes (type,id, likes) values ('$type','$id','$likes') ";
+                $sql = "insert into likes (type,id,likes) values ('$type','$id','$likes') ";
                 $DB->save($sql);
 
                 //increments the right table
-                    $sql = "update {$type} set likes = likes + 1 where {$type}id = '$id ' limit 1 ";
+                    $sql = "update {$type}s set likes = likes + 1 where {$type}id = '$id ' limit 1 ";
                     $DB->save($sql);
             }
-
-            die;
         }
 //    }
 

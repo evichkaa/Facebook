@@ -2,7 +2,7 @@
 class User{
     public function get_data($id){
 
-        $query="select * from users where userid = $id limit 1";
+        $query="select * from users where userid = '$id' limit 1";
 
         $DB= new Database();
         $result = $DB->read($query);
@@ -30,7 +30,7 @@ class User{
     }
     public function get_friends($id){
 
-        $query="select * from users where userid != '$id' ";
+        $query="select * from users where userid != '$id'";
         $DB= new Database();
         $result = $DB->read($query);
         if($result){
@@ -41,12 +41,11 @@ class User{
 
     }
     public function get_following($id,$type){
-        if( is_numeric($id)){
+        if(is_numeric($id)){
             $DB= new Database();
 
-
             //save following
-            $sql = "select following from likes where type = 'type ' && id= '$id' limit 1 ";
+            $sql = "select following from likes where type = '$type' && id= '$id' limit 1 ";
             $result = $DB->read($sql);
             if(is_array($result)) {
 
@@ -63,12 +62,8 @@ class User{
     public function follow_user($id,$type,$facebook_userid){
 
         $DB= new Database();
-//        if($type == "post"){
 
-        $DB= new Database();
-
-        //save likes - details
-        $sql = "select following from likes where type = 'post ' && contentid = '$facebook_userid' limit 1 ";
+        $sql = "select following from likes where type = 'post' && contentid = '$facebook_userid' limit 1 ";
         $result = $DB->read($sql);
         if(is_array($result)){
 
@@ -85,7 +80,7 @@ class User{
 
                 $likes_string = json_encode($likes);
 
-                $sql = "update likes set following = 'likes_sting ' where type = 'post ' && contentid= '$facebook_userid' limit 1  ";
+                $sql = "update likes set following = '$likes_string' where type = 'post' && contentid = '$facebook_userid' limit 1";
                 $DB->save($sql);
 
 
@@ -93,10 +88,10 @@ class User{
 
             }else{
                 $key = array_search($facebook_userid, $user_ids);
-                unset ($following [$key]);
+                unset ($following[$key]);
 
                 $likes_string = json_encode($likes);
-                $sql = "update likes set following = 'likes_sting ' where type = 'type ' && contentid = '$facebook_userid' limit 1  ";
+                $sql = "update likes set following = '$likes_string' where type = '$type' && contentid = '$facebook_userid' limit 1";
                 $DB->save($sql);
 
 
@@ -111,7 +106,7 @@ class User{
             $arr2[] = $arr;
 
             $following= json_encode($arr2);
-            $sql = "insert into following (type,id, following) values ('$type','$facebook_userid,'$following') ";
+            $sql = "insert into following (type,id, following) values ('$type','$facebook_userid,'$following')";
             $DB->save($sql);
 
         }

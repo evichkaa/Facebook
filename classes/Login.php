@@ -19,7 +19,7 @@ class Login{
         if($result){
 
             $row = $result[0];
-            if($password == $row['password']){
+            if(hash("sha1", $password) == $row['password']){
 
                 //create session data
                 $_SESSION['facebook_userid'] = $row['userid'];

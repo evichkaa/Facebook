@@ -14,7 +14,6 @@ Class Settings{
 public function save_settings($data,$id){
         $DB = new Database();
         $password = $data['password'];
-
         if(strlen($password)<30) {
 
             if ($data['password'] == $data['password2']) {
@@ -26,14 +25,13 @@ public function save_settings($data,$id){
         }
     unset($data['password2']);
 
-        $sql="update users set";
+        $sql="update users set ";
         foreach ($data as $key=> $value){
 
             $sql .= $key. "='". $value."',";
 
     }
         $sql =trim($sql,",");
-
         $sql .= "where userid = '$id' limit 1" ;
 
 
